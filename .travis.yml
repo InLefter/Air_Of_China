@@ -1,0 +1,14 @@
+language: python
+python:
+  - 3.5.2
+
+#运行的脚本命令
+script:
+  - python Spider.py
+  - python SiteSpider.py
+  - python CityDaySpider.py
+  - python CityRealTimeSpider.py
+
+branches:
+  only:
+    - master
