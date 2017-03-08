@@ -2,6 +2,15 @@ language: python
 python:
   - 3.5.2
 
+install:
+  - pip install --use-mirrors requests
+  - pip install --use-mirrors pymsql
+  - pip install --use-mirrors xmltodict
+  - pip install --use-mirrors redis
+
+script:
+  - Spider.py
+
 branches:
   only:
     - master
