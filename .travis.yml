@@ -9,7 +9,7 @@ install:
   - pip install redis
 
 script:
-  - Spider.py
+  - python Spider.py
 
 branches:
   only:
