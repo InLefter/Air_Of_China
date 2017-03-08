@@ -4,7 +4,7 @@ python:
 
 install:
   - pip install requests
-  - pip install pymsql
+  - pip install pymysql
   - pip install xmltodict
   - pip install redis
 
