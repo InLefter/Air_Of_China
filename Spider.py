@@ -29,13 +29,17 @@ class SpiderMain(object):
         # self.cityArray = json.loads(data.cityList_json)
         # self.stationArray = json.loads(data.stationList_json)
         self.cityDict = all_data.cityList_json
-        self.connection = pymysql.Connect(host='127.0.0.1', user='root', passwd=‘xxxxxx’, charset="utf8")
+        self.connection = pymysql.Connect(host='127.0.0.1',
+                                          user='root', passwd=‘xxxxx’,
+                                          charset="utf8")
         self.con_cursor = self.connection.cursor()
         self.dt = datetime.datetime
         self.now = self.dt.now().strftime('%Y%m')
         self.con_cursor.execute("USE AQI")
 
-        self.redis_conn = redis.Redis(host='localhost', port=6379, db=0)
+        self.redis_conn = redis.Redis(host='localhost', port=6379,
+                                      db=0, decode_responses=False,
+                                      encoding='utf-8')
 
         self.url = 'http://106.37.208.233:20035/ClientBin/Env-CnemcPublish-RiaServices-EnvCnemcPublishDomainService.svc/binary/'
         self.headers = {'user-agent': "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; rv:11.0) like Gecko",
@@ -285,7 +289,7 @@ class SpiderMain(object):
             data['Unhealthful'] = '—'
 
         json_formated = json.dumps(data, ensure_ascii=False)
-        data_to_redis = '{ "CityCode": ' + data['CityCode'] + ', "Detail": ' + json_formated + '}'
+        data_to_redis = '{ "CityCode": ' + str(data['CityCode']) + ', "Detail": ' + json_formated + '}'
         self.redis_conn.set(data['CityCode'], data_to_redis)
 
     # 处理得到的site-JSON数据
@@ -327,22 +331,23 @@ class SpiderMain(object):
         json_formated = json.dumps(data, ensure_ascii=False)
 
         # Redis-写入到最新24小时站点信息
-        for i in range(23, 0, -1):
-            self.redis_conn.hset(data['StationCode'] + '_24h', i, obj.redis_conn.hget(data['StationCode'] + '_24h', i - 1))
-        self.redis_conn.hset(data['StationCode'] + '_24h', 0, json_formated)
+        redis_name = data['StationCode'] + '_24h'
+        # print(json_formated)
+        self.redis_conn.lpush(redis_name, json_formated)
+        if self.redis_conn.llen(redis_name) >= 24:
+            self.redis_conn.rpop(redis_name)
 
         # Redis-写入到最新站点信息
         data_to_redis = '{ "StationCode": "' +data['StationCode'] + '", "Detail": ' + json_formated + '}'
         self.redis_conn.set(data['StationCode'], data_to_redis)
 
-        return json_formated
+        return json.loads(json_formated)
 
     # 获得城市实时信息
     def getCityRealTimeInfo(self):
-            self.createCityRealTimeTable()
-            action = 'GetCityRealTimeAQIModelByCitycode'
-        # for key in self.cityDict.keys():
-            key = 330100
+        self.createCityRealTimeTable()
+        action = 'GetCityRealTimeAQIModelByCitycode'
+        for key in self.cityDict.keys():
             request = requests.get(
                     url= self.url + action,
                     params={'cityCode': key},
@@ -401,7 +406,7 @@ class SpiderMain(object):
                 site_jsoned = self.dealWithSiteData(get_data)
 
                 # Redis-写入到最新城市所有站点信息
-                data_to_redis = '{ "CityCode_AllSites": ' + key + ', "Detail": ' + site_jsoned + '}'
+                data_to_redis = '{ "CityCode_AllSites": ' + key + ', "Detail": ' + str(site_jsoned) + '}'
                 self.redis_conn.set(key + '_allsite', data_to_redis)
             else:
                 data_formated_dict = []
@@ -412,8 +417,11 @@ class SpiderMain(object):
                     # 城市站点append
                     data_formated_dict.append(site_jsoned)
 
+                # print(data_formated_dict)
+                # print(json.dumps(data_formated_dict, ensure_ascii=False))
+
                 # Redis-写入到最新城市所有站点信息
-                data_to_redis = '{ "CityCode_AllSites": ' + key + ', "Detail": ' + json.dumps(data_formated_dict) + '}'
+                data_to_redis = '{ "CityCode_AllSites": ' + key + ', "Detail": ' + json.dumps(data_formated_dict, ensure_ascii=False) + '}'
                 self.redis_conn.set(key + '_allsite', data_to_redis)
 
 
@@ -453,6 +461,23 @@ class SpiderMain(object):
 
             self.WTDB_cityinfo(data)
 
+            try:
+                data['Measure'] = air_me[data['Quality']]['measure']
+                data['Unhealthful'] = air_me[data['Quality']]['unhealthful']
+            except:
+                data['Measure'] = '—'
+                data['Unhealthful'] = '—'
+
+            data['Time'] = data['Time'].strftime('%Y-%m-%d %H:%M:%S')
+            json_formated = json.dumps(data, ensure_ascii=False)
+
+            # Redis-写入到最新一个月城市信息
+            redis_name = data['CityCode'] + '_month'
+            # print(json_formated)
+            self.redis_conn.lpush(redis_name, json_formated)
+            if self.redis_conn.llen(redis_name) >= 30:
+                self.redis_conn.rpop(redis_name)
+
 
     # update json-formated redis data after crawing
     def updateGeneralRedis(self,data):
@@ -461,13 +486,3 @@ class SpiderMain(object):
     # 更新城市所有站点的redis数据
     def updateCityAllSites(self,data):
         self.redis_conn.set(data['ID'], data['detail'])
-
-if __name__ == "__main__":
-    obj = SpiderMain()
-    print(datetime.datetime.now())
-    obj.getAllSitesInfoByCity()
-
-    print(datetime.datetime.now())
-    obj.con_cursor.close()
-    obj.connection.commit()
-    obj.connection.close()
