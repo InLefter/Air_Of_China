@@ -29,7 +29,7 @@ class SpiderMain(object):
         # self.cityArray = json.loads(data.cityList_json)
         # self.stationArray = json.loads(data.stationList_json)
         self.cityDict = all_data.cityList_json
-        self.connection = pymysql.Connect(host='127.0.0.1', user='root', passwd='zh20110612', charset="utf8")
+        self.connection = pymysql.Connect(host='127.0.0.1', user='root', passwd=‘xxxxxx’, charset="utf8")
         self.con_cursor = self.connection.cursor()
         self.dt = datetime.datetime
         self.now = self.dt.now().strftime('%Y%m')
