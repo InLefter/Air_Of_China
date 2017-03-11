@@ -256,13 +256,10 @@ class SpiderMain(object):
 
     # 处理得到的city-rt-JSON数据
     def dealWithCityRealTimeData(self, dict):
-        time = self.dt.strptime(dict['TimePoint'], '%Y-%m-%dT%H:%M:%S')
         data = {}
-        data['CityCode'] = dict['CityCode']
+        data['CityCode'] = int(dict['CityCode'])
         data['Area'] = dict['Area']
-        data['Latitude'] = dict['Latitude']
-        data['Longitude'] = dict['Longitude']
-        data['Time'] = time
+        data['Time'] = dict['TimePoint'].replace('T', ' ')
         data['PrimaryPollutant'] = dict['PrimaryPollutant']
         data['Quality'] = dict['Quality']
         # 排除没有具体数据的情况
@@ -287,10 +284,8 @@ class SpiderMain(object):
             data['Measure'] = '—'
             data['Unhealthful'] = '—'
 
-        data['Time'] = data['Time'].strftime('%Y-%m-%d %H:%M:%S')
-
-        json_formated = json.dumps(data, ensure_ascii=False);
-        data_to_redis = '{ "CityCode": "' + data['CityCode'] + '", "Detail": ' + json_formated + '}'
+        json_formated = json.dumps(data, ensure_ascii=False)
+        data_to_redis = '{ "CityCode": ' + data['CityCode'] + ', "Detail": ' + json_formated + '}'
         self.redis_conn.set(data['CityCode'], data_to_redis)
 
     # 处理得到的site-JSON数据
@@ -331,6 +326,12 @@ class SpiderMain(object):
 
         json_formated = json.dumps(data, ensure_ascii=False)
 
+        # Redis-写入到最新24小时站点信息
+        for i in range(23, 0, -1):
+            self.redis_conn.hset(data['StationCode'] + '_24h', i, obj.redis_conn.hget(data['StationCode'] + '_24h', i - 1))
+        self.redis_conn.hset(data['StationCode'] + '_24h', 0, json_formated)
+
+        # Redis-写入到最新站点信息
         data_to_redis = '{ "StationCode": "' +data['StationCode'] + '", "Detail": ' + json_formated + '}'
         self.redis_conn.set(data['StationCode'], data_to_redis)
 
@@ -338,9 +339,10 @@ class SpiderMain(object):
 
     # 获得城市实时信息
     def getCityRealTimeInfo(self):
-        self.createCityRealTimeTable()
-        action = 'GetCityRealTimeAQIModelByCitycode'
-        for key in self.cityDict.keys():
+            self.createCityRealTimeTable()
+            action = 'GetCityRealTimeAQIModelByCitycode'
+        # for key in self.cityDict.keys():
+            key = 330100
             request = requests.get(
                     url= self.url + action,
                     params={'cityCode': key},
@@ -366,6 +368,7 @@ class SpiderMain(object):
 
             result = json_d['GetCityRealTimeAQIModelByCitycodeResponse']['GetCityRealTimeAQIModelByCitycodeResult']['RootResults']['CityAQIPublishLive']
 
+            # print(result)
             self.dealWithCityRealTimeData(result)
 
 
@@ -394,14 +397,23 @@ class SpiderMain(object):
             # data_to_redis = {}
             # data_to_redis['ID'] = key+'_allsite'
             if isinstance(get_data, dict):
-                data_to_redis = '{ "CityCode_AllSites": "' + key + '", Detail: ' + self.dealWithSiteData(get_data) + '}'
+                # 格式化的站点信息(JSON)
+                site_jsoned = self.dealWithSiteData(get_data)
+
+                # Redis-写入到最新城市所有站点信息
+                data_to_redis = '{ "CityCode_AllSites": ' + key + ', "Detail": ' + site_jsoned + '}'
                 self.redis_conn.set(key + '_allsite', data_to_redis)
             else:
                 data_formated_dict = []
                 for site in get_data:
-                    data_formated_dict.append(self.dealWithSiteData(site))
+                    # 格式化的站点信息(JSON)
+                    site_jsoned = self.dealWithSiteData(site)
 
-                data_to_redis = '{ "CityCode_AllSites": "' + key + '", Detail: ' + json.dumps(data_formated_dict) + '}'
+                    # 城市站点append
+                    data_formated_dict.append(site_jsoned)
+
+                # Redis-写入到最新城市所有站点信息
+                data_to_redis = '{ "CityCode_AllSites": ' + key + ', "Detail": ' + json.dumps(data_formated_dict) + '}'
                 self.redis_conn.set(key + '_allsite', data_to_redis)
 
 
@@ -454,6 +466,7 @@ if __name__ == "__main__":
     obj = SpiderMain()
     print(datetime.datetime.now())
     obj.getAllSitesInfoByCity()
+
     print(datetime.datetime.now())
     obj.con_cursor.close()
     obj.connection.commit()
