@@ -482,9 +482,13 @@ class SpiderMain(object):
 
 
     # update json-formated redis data after crawing
-    def updateGeneralRedis(self,data):
-        self.redis_conn.set(data['ID'], data['detail'])
+    # def updateGeneralRedis(self,data):
+    #     self.redis_conn.set(data['ID'], data['detail'])
+    #
+    # # 更新城市所有站点的redis数据
+    # def updateCityAllSites(self,data):
+    #     self.redis_conn.set(data['ID'], data['detail'])
 
-    # 更新城市所有站点的redis数据
-    def updateCityAllSites(self,data):
-        self.redis_conn.set(data['ID'], data['detail'])
+if __name__ == "__main__":
+    obj = SpiderMain()
+    obj.getAllSitesInfoByCity()
