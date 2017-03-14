@@ -4,12 +4,10 @@ python:
 
 install:
   - pip install requests
-  - pip install pymysql
   - pip install xmltodict
-  - pip install redis
 
 script:
-  - python Spider.py
+  - python CityRealTimeSpider.py
 
 branches:
   only:

@@ -4,6 +4,11 @@ a spider (or crawler) based on python3, which is to craw air data from Chinese o
 
 本项目是一个基于python3且从全国城市空气质量发布平台上的Silverlight中爬取的空气质量数据，同时也是我的一个SRTP项目中的一部分。
 
+## ENVIROMENT
+python version 3.5
+使用前请安装这两个模块
+`pip insatall requests xmltodict`
+
 ## INTRODUCTION
 
 some usage examples had been included( SiteSpider.py, CityDaySpider.py, CityRealTimeSpider.py). you can know how it can be used.
