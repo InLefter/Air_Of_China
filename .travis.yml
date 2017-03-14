@@ -7,7 +7,7 @@ install:
   - pip install xmltodict
 
 script:
-  - python CityRealTimeSpider.py
+  - python Spider.py
 
 branches:
   only:
