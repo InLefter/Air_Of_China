@@ -6,7 +6,9 @@ from io import StringIO, BytesIO
 
 import data as all_data
 import json, re, base64, zlib, datetime
-import requests, pymysql, xmltodict, redis
+import requests, xmltodict
+
+# import pymysql, redis
 
 # 所需要的请求以及相关格式
 # GET action:GetCitiesByPid?pid=11 获得省份城市
