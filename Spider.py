@@ -30,12 +30,12 @@ class SpiderMain(object):
         # self.stationArray = json.loads(data.stationList_json)
         self.cityDict = all_data.cityList_json
         # self.connection = pymysql.Connect(host='127.0.0.1',
-                                          user='root', passwd=‘xxxxx’,
-                                          charset="utf8")
-        self.con_cursor = self.connection.cursor()
+        #                                   user='root', passwd=‘xxxxx’,
+        #                                   charset="utf8")
+        # self.con_cursor = self.connection.cursor()
         self.dt = datetime.datetime
         self.now = self.dt.now().strftime('%Y%m')
-        self.con_cursor.execute("USE AQI")
+        # self.con_cursor.execute("USE AQI")
 
         # self.redis_conn = redis.Redis(host='localhost', port=6379,
         #                               db=0, decode_responses=False,
@@ -49,149 +49,149 @@ class SpiderMain(object):
                         'cache-control': "no-cache"}
 
     # 准备监测点数据表
-    def createSiteTable(self):
+    # def createSiteTable(self):
         # execute的字符串转义，强制利用python的转义
-        self.con_cursor.execute("CREATE TABLE if not exists site_table_%s" % self.now +
-                                "(`siteID` VARCHAR(11) NOT NULL DEFAULT '',"
-                                "`Time` DATETIME NOT NULL,"
-                                "`AQI` INT(11) DEFAULT NULL,"
-                                "`PM2_5` INT(11) DEFAULT NULL,"
-                                "`PM10` INT(11) DEFAULT NULL,"
-                                "`SO2` INT(11) DEFAULT NULL,"
-                                "`NO2` INT(11) DEFAULT NULL,"
-                                "`CO` FLOAT DEFAULT NULL,"
-                                "`O3_24h` INT(11) DEFAULT NULL,"
-                                "`PrimaryPollutant` VARCHAR(30) DEFAULT NULL,"
-                                "`Quality` VARCHAR(11) DEFAULT NULL"
-                                ") ENGINE=InnoDB DEFAULT charset=utf8 "
-                                "PARTITION BY RANGE (DAY(time)) \
-                              (PARTITION p1 VALUES LESS THAN (2) ENGINE = InnoDB,\
-                               PARTITION p2 VALUES LESS THAN (3) ENGINE = InnoDB,\
-                               PARTITION p3 VALUES LESS THAN (4) ENGINE = InnoDB,\
-                               PARTITION p4 VALUES LESS THAN (5) ENGINE = InnoDB,\
-                               PARTITION p5 VALUES LESS THAN (6) ENGINE = InnoDB,\
-                               PARTITION p6 VALUES LESS THAN (7) ENGINE = InnoDB,\
-                               PARTITION p7 VALUES LESS THAN (8) ENGINE = InnoDB,\
-                               PARTITION p8 VALUES LESS THAN (9) ENGINE = InnoDB,\
-                               PARTITION p9 VALUES LESS THAN (10) ENGINE = InnoDB,\
-                               PARTITION p10 VALUES LESS THAN (11) ENGINE = InnoDB,\
-                               PARTITION p11 VALUES LESS THAN (12) ENGINE = InnoDB,\
-                               PARTITION p12 VALUES LESS THAN (13) ENGINE = InnoDB,\
-                               PARTITION p13 VALUES LESS THAN (14) ENGINE = InnoDB,\
-                               PARTITION p14 VALUES LESS THAN (15) ENGINE = InnoDB,\
-                               PARTITION p15 VALUES LESS THAN (16) ENGINE = InnoDB,\
-                               PARTITION p16 VALUES LESS THAN (17) ENGINE = InnoDB,\
-                               PARTITION p17 VALUES LESS THAN (18) ENGINE = InnoDB,\
-                               PARTITION p18 VALUES LESS THAN (19) ENGINE = InnoDB,\
-                               PARTITION p19 VALUES LESS THAN (20) ENGINE = InnoDB,\
-                               PARTITION p20 VALUES LESS THAN (21) ENGINE = InnoDB,\
-                               PARTITION p21 VALUES LESS THAN (22) ENGINE = InnoDB,\
-                               PARTITION p22 VALUES LESS THAN (23) ENGINE = InnoDB,\
-                               PARTITION p23 VALUES LESS THAN (24) ENGINE = InnoDB,\
-                               PARTITION p24 VALUES LESS THAN (25) ENGINE = InnoDB,\
-                               PARTITION p25 VALUES LESS THAN (26) ENGINE = InnoDB,\
-                               PARTITION p26 VALUES LESS THAN (27) ENGINE = InnoDB,\
-                               PARTITION p27 VALUES LESS THAN (28) ENGINE = InnoDB,\
-                               PARTITION p28 VALUES LESS THAN (29) ENGINE = InnoDB,\
-                               PARTITION p29 VALUES LESS THAN (30) ENGINE = InnoDB,\
-                               PARTITION p30 VALUES LESS THAN (31) ENGINE = InnoDB,\
-                               PARTITION p31 VALUES LESS THAN MAXVALUE ENGINE = InnoDB)")
+        # self.con_cursor.execute("CREATE TABLE if not exists site_table_%s" % self.now +
+        #                         "(`siteID` VARCHAR(11) NOT NULL DEFAULT '',"
+        #                         "`Time` DATETIME NOT NULL,"
+        #                         "`AQI` INT(11) DEFAULT NULL,"
+        #                         "`PM2_5` INT(11) DEFAULT NULL,"
+        #                         "`PM10` INT(11) DEFAULT NULL,"
+        #                         "`SO2` INT(11) DEFAULT NULL,"
+        #                         "`NO2` INT(11) DEFAULT NULL,"
+        #                         "`CO` FLOAT DEFAULT NULL,"
+        #                         "`O3_24h` INT(11) DEFAULT NULL,"
+        #                         "`PrimaryPollutant` VARCHAR(30) DEFAULT NULL,"
+        #                         "`Quality` VARCHAR(11) DEFAULT NULL"
+        #                         ") ENGINE=InnoDB DEFAULT charset=utf8 "
+        #                         "PARTITION BY RANGE (DAY(time)) \
+        #                       (PARTITION p1 VALUES LESS THAN (2) ENGINE = InnoDB,\
+        #                        PARTITION p2 VALUES LESS THAN (3) ENGINE = InnoDB,\
+        #                        PARTITION p3 VALUES LESS THAN (4) ENGINE = InnoDB,\
+        #                        PARTITION p4 VALUES LESS THAN (5) ENGINE = InnoDB,\
+        #                        PARTITION p5 VALUES LESS THAN (6) ENGINE = InnoDB,\
+        #                        PARTITION p6 VALUES LESS THAN (7) ENGINE = InnoDB,\
+        #                        PARTITION p7 VALUES LESS THAN (8) ENGINE = InnoDB,\
+        #                        PARTITION p8 VALUES LESS THAN (9) ENGINE = InnoDB,\
+        #                        PARTITION p9 VALUES LESS THAN (10) ENGINE = InnoDB,\
+        #                        PARTITION p10 VALUES LESS THAN (11) ENGINE = InnoDB,\
+        #                        PARTITION p11 VALUES LESS THAN (12) ENGINE = InnoDB,\
+        #                        PARTITION p12 VALUES LESS THAN (13) ENGINE = InnoDB,\
+        #                        PARTITION p13 VALUES LESS THAN (14) ENGINE = InnoDB,\
+        #                        PARTITION p14 VALUES LESS THAN (15) ENGINE = InnoDB,\
+        #                        PARTITION p15 VALUES LESS THAN (16) ENGINE = InnoDB,\
+        #                        PARTITION p16 VALUES LESS THAN (17) ENGINE = InnoDB,\
+        #                        PARTITION p17 VALUES LESS THAN (18) ENGINE = InnoDB,\
+        #                        PARTITION p18 VALUES LESS THAN (19) ENGINE = InnoDB,\
+        #                        PARTITION p19 VALUES LESS THAN (20) ENGINE = InnoDB,\
+        #                        PARTITION p20 VALUES LESS THAN (21) ENGINE = InnoDB,\
+        #                        PARTITION p21 VALUES LESS THAN (22) ENGINE = InnoDB,\
+       #                         PARTITION p22 VALUES LESS THAN (23) ENGINE = InnoDB,\
+        #                        PARTITION p23 VALUES LESS THAN (24) ENGINE = InnoDB,\
+        #                        PARTITION p24 VALUES LESS THAN (25) ENGINE = InnoDB,\
+        #                        PARTITION p25 VALUES LESS THAN (26) ENGINE = InnoDB,\
+        #                        PARTITION p26 VALUES LESS THAN (27) ENGINE = InnoDB,\
+        #                        PARTITION p27 VALUES LESS THAN (28) ENGINE = InnoDB,\
+        #                        PARTITION p28 VALUES LESS THAN (29) ENGINE = InnoDB,\
+        #                        PARTITION p29 VALUES LESS THAN (30) ENGINE = InnoDB,\
+        #                        PARTITION p30 VALUES LESS THAN (31) ENGINE = InnoDB,\
+        #                        PARTITION p31 VALUES LESS THAN MAXVALUE ENGINE = InnoDB)")
 
     # 准备城市实时信息数据表
-    def createCityRealTimeTable(self):
-        self.con_cursor.execute("CREATE TABLE if not exists city_rt_table_%s" % self.now +
-                                "(`cityID` INT(11) NOT NULL,"
-                                "`Time` DATETIME NOT NULL,"
-                                "`AQI` INT(11) DEFAULT NULL,"
-                                "`PM2_5` INT(11) DEFAULT NULL,"
-                                "`PM10` INT(11) DEFAULT NULL,"
-                                "`SO2` INT(11) DEFAULT NULL,"
-                                "`NO2` INT(11) DEFAULT NULL,"
-                                "`CO` FLOAT DEFAULT NULL,"
-                                "`O3` INT(11) DEFAULT NULL,"
-                                "`PrimaryPollutant` VARCHAR(30) DEFAULT NULL,"
-                                "`Quality` VARCHAR(11) DEFAULT NULL"
-                                ") ENGINE=InnoDB DEFAULT charset=utf8 "
-                                "PARTITION BY RANGE (DAY(time)) \
-                                (PARTITION p1 VALUES LESS THAN (2) ENGINE = InnoDB,\
-                               PARTITION p2 VALUES LESS THAN (3) ENGINE = InnoDB,\
-                               PARTITION p3 VALUES LESS THAN (4) ENGINE = InnoDB,\
-                               PARTITION p4 VALUES LESS THAN (5) ENGINE = InnoDB,\
-                               PARTITION p5 VALUES LESS THAN (6) ENGINE = InnoDB,\
-                               PARTITION p6 VALUES LESS THAN (7) ENGINE = InnoDB,\
-                               PARTITION p7 VALUES LESS THAN (8) ENGINE = InnoDB,\
-                               PARTITION p8 VALUES LESS THAN (9) ENGINE = InnoDB,\
-                               PARTITION p9 VALUES LESS THAN (10) ENGINE = InnoDB,\
-                               PARTITION p10 VALUES LESS THAN (11) ENGINE = InnoDB,\
-                               PARTITION p11 VALUES LESS THAN (12) ENGINE = InnoDB,\
-                               PARTITION p12 VALUES LESS THAN (13) ENGINE = InnoDB,\
-                               PARTITION p13 VALUES LESS THAN (14) ENGINE = InnoDB,\
-                               PARTITION p14 VALUES LESS THAN (15) ENGINE = InnoDB,\
-                               PARTITION p15 VALUES LESS THAN (16) ENGINE = InnoDB,\
-                               PARTITION p16 VALUES LESS THAN (17) ENGINE = InnoDB,\
-                               PARTITION p17 VALUES LESS THAN (18) ENGINE = InnoDB,\
-                               PARTITION p18 VALUES LESS THAN (19) ENGINE = InnoDB,\
-                               PARTITION p19 VALUES LESS THAN (20) ENGINE = InnoDB,\
-                               PARTITION p20 VALUES LESS THAN (21) ENGINE = InnoDB,\
-                               PARTITION p21 VALUES LESS THAN (22) ENGINE = InnoDB,\
-                               PARTITION p22 VALUES LESS THAN (23) ENGINE = InnoDB,\
-                               PARTITION p23 VALUES LESS THAN (24) ENGINE = InnoDB,\
-                               PARTITION p24 VALUES LESS THAN (25) ENGINE = InnoDB,\
-                               PARTITION p25 VALUES LESS THAN (26) ENGINE = InnoDB,\
-                               PARTITION p26 VALUES LESS THAN (27) ENGINE = InnoDB,\
-                               PARTITION p27 VALUES LESS THAN (28) ENGINE = InnoDB,\
-                               PARTITION p28 VALUES LESS THAN (29) ENGINE = InnoDB,\
-                               PARTITION p29 VALUES LESS THAN (30) ENGINE = InnoDB,\
-                               PARTITION p30 VALUES LESS THAN (31) ENGINE = InnoDB,\
-                               PARTITION p31 VALUES LESS THAN MAXVALUE ENGINE = InnoDB)")
+    # def createCityRealTimeTable(self):
+        # self.con_cursor.execute("CREATE TABLE if not exists city_rt_table_%s" % self.now +
+        #                         "(`cityID` INT(11) NOT NULL,"
+        #                         "`Time` DATETIME NOT NULL,"
+        #                         "`AQI` INT(11) DEFAULT NULL,"
+        #                         "`PM2_5` INT(11) DEFAULT NULL,"
+        #                         "`PM10` INT(11) DEFAULT NULL,"
+        #                         "`SO2` INT(11) DEFAULT NULL,"
+        #                         "`NO2` INT(11) DEFAULT NULL,"
+        #                         "`CO` FLOAT DEFAULT NULL,"
+        #                         "`O3` INT(11) DEFAULT NULL,"
+        #                         "`PrimaryPollutant` VARCHAR(30) DEFAULT NULL,"
+        #                         "`Quality` VARCHAR(11) DEFAULT NULL"
+        #                         ") ENGINE=InnoDB DEFAULT charset=utf8 "
+        #                         "PARTITION BY RANGE (DAY(time)) \
+        #                         (PARTITION p1 VALUES LESS THAN (2) ENGINE = InnoDB,\
+        #                        PARTITION p2 VALUES LESS THAN (3) ENGINE = InnoDB,\
+        #                        PARTITION p3 VALUES LESS THAN (4) ENGINE = InnoDB,\
+        #                        PARTITION p4 VALUES LESS THAN (5) ENGINE = InnoDB,\
+        #                        PARTITION p5 VALUES LESS THAN (6) ENGINE = InnoDB,\
+        #                        PARTITION p6 VALUES LESS THAN (7) ENGINE = InnoDB,\
+        #                        PARTITION p7 VALUES LESS THAN (8) ENGINE = InnoDB,\
+        #                        PARTITION p8 VALUES LESS THAN (9) ENGINE = InnoDB,\
+        #                        PARTITION p9 VALUES LESS THAN (10) ENGINE = InnoDB,\
+        #                        PARTITION p10 VALUES LESS THAN (11) ENGINE = InnoDB,\
+        #                        PARTITION p11 VALUES LESS THAN (12) ENGINE = InnoDB,\
+        #                        PARTITION p12 VALUES LESS THAN (13) ENGINE = InnoDB,\
+        #                        PARTITION p13 VALUES LESS THAN (14) ENGINE = InnoDB,\
+        #                        PARTITION p14 VALUES LESS THAN (15) ENGINE = InnoDB,\
+        #                        PARTITION p15 VALUES LESS THAN (16) ENGINE = InnoDB,\
+        #                        PARTITION p16 VALUES LESS THAN (17) ENGINE = InnoDB,\
+        #                        PARTITION p17 VALUES LESS THAN (18) ENGINE = InnoDB,\
+        #                        PARTITION p18 VALUES LESS THAN (19) ENGINE = InnoDB,\
+        #                        PARTITION p19 VALUES LESS THAN (20) ENGINE = InnoDB,\
+        #                        PARTITION p20 VALUES LESS THAN (21) ENGINE = InnoDB,\
+        #                        PARTITION p21 VALUES LESS THAN (22) ENGINE = InnoDB,\
+        #                        PARTITION p22 VALUES LESS THAN (23) ENGINE = InnoDB,\
+        #                        PARTITION p23 VALUES LESS THAN (24) ENGINE = InnoDB,\
+        #                        PARTITION p24 VALUES LESS THAN (25) ENGINE = InnoDB,\
+        #                        PARTITION p25 VALUES LESS THAN (26) ENGINE = InnoDB,\
+        #                        PARTITION p26 VALUES LESS THAN (27) ENGINE = InnoDB,\
+        #                        PARTITION p27 VALUES LESS THAN (28) ENGINE = InnoDB,\
+        #                        PARTITION p28 VALUES LESS THAN (29) ENGINE = InnoDB,\
+        #                        PARTITION p29 VALUES LESS THAN (30) ENGINE = InnoDB,\
+        #                        PARTITION p30 VALUES LESS THAN (31) ENGINE = InnoDB,\
+        #                        PARTITION p31 VALUES LESS THAN MAXVALUE ENGINE = InnoDB)")
 
     # 准备城市日信息数据表
-    def createCityDayTable(self):
-        self.con_cursor.execute("CREATE TABLE if not exists city_table_%s" % self.now +
-                                "(`cityID` INT(11) NOT NULL,"
-                                "`Time` DATETIME NOT NULL,"
-                                "`AQI` INT(11) DEFAULT NULL,"
-                                "`PM2_5_24h` INT(11) DEFAULT NULL,"
-                                "`PM10_24h` INT(11) DEFAULT NULL,"
-                                "`SO2_24h` INT(11) DEFAULT NULL,"
-                                "`NO2_24h` INT(11) DEFAULT NULL,"
-                                "`CO_24h` FLOAT DEFAULT NULL,"
-                                "`O3_8h_24h` INT(11) DEFAULT NULL,"
-                                "`PrimaryPollutant` VARCHAR(30) DEFAULT NULL,"
-                                "`Quality` VARCHAR(11) DEFAULT NULL"
-                                ") ENGINE=InnoDB DEFAULT charset=utf8 "
-                                "PARTITION BY RANGE (DAY(time)) \
-                                (PARTITION p1 VALUES LESS THAN (2) ENGINE = InnoDB,\
-                               PARTITION p2 VALUES LESS THAN (3) ENGINE = InnoDB,\
-                               PARTITION p3 VALUES LESS THAN (4) ENGINE = InnoDB,\
-                               PARTITION p4 VALUES LESS THAN (5) ENGINE = InnoDB,\
-                               PARTITION p5 VALUES LESS THAN (6) ENGINE = InnoDB,\
-                               PARTITION p6 VALUES LESS THAN (7) ENGINE = InnoDB,\
-                               PARTITION p7 VALUES LESS THAN (8) ENGINE = InnoDB,\
-                               PARTITION p8 VALUES LESS THAN (9) ENGINE = InnoDB,\
-                               PARTITION p9 VALUES LESS THAN (10) ENGINE = InnoDB,\
-                               PARTITION p10 VALUES LESS THAN (11) ENGINE = InnoDB,\
-                               PARTITION p11 VALUES LESS THAN (12) ENGINE = InnoDB,\
-                               PARTITION p12 VALUES LESS THAN (13) ENGINE = InnoDB,\
-                               PARTITION p13 VALUES LESS THAN (14) ENGINE = InnoDB,\
-                               PARTITION p14 VALUES LESS THAN (15) ENGINE = InnoDB,\
-                               PARTITION p15 VALUES LESS THAN (16) ENGINE = InnoDB,\
-                               PARTITION p16 VALUES LESS THAN (17) ENGINE = InnoDB,\
-                               PARTITION p17 VALUES LESS THAN (18) ENGINE = InnoDB,\
-                               PARTITION p18 VALUES LESS THAN (19) ENGINE = InnoDB,\
-                               PARTITION p19 VALUES LESS THAN (20) ENGINE = InnoDB,\
-                               PARTITION p20 VALUES LESS THAN (21) ENGINE = InnoDB,\
-                               PARTITION p21 VALUES LESS THAN (22) ENGINE = InnoDB,\
-                               PARTITION p22 VALUES LESS THAN (23) ENGINE = InnoDB,\
-                               PARTITION p23 VALUES LESS THAN (24) ENGINE = InnoDB,\
-                               PARTITION p24 VALUES LESS THAN (25) ENGINE = InnoDB,\
-                               PARTITION p25 VALUES LESS THAN (26) ENGINE = InnoDB,\
-                               PARTITION p26 VALUES LESS THAN (27) ENGINE = InnoDB,\
-                               PARTITION p27 VALUES LESS THAN (28) ENGINE = InnoDB,\
-                               PARTITION p28 VALUES LESS THAN (29) ENGINE = InnoDB,\
-                               PARTITION p29 VALUES LESS THAN (30) ENGINE = InnoDB,\
-                               PARTITION p30 VALUES LESS THAN (31) ENGINE = InnoDB,\
-                               PARTITION p31 VALUES LESS THAN MAXVALUE ENGINE = InnoDB)")
+    # def createCityDayTable(self):
+        # self.con_cursor.execute("CREATE TABLE if not exists city_table_%s" % self.now +
+        #                         "(`cityID` INT(11) NOT NULL,"
+        #                         "`Time` DATETIME NOT NULL,"
+        #                         "`AQI` INT(11) DEFAULT NULL,"
+        #                         "`PM2_5_24h` INT(11) DEFAULT NULL,"
+        #                         "`PM10_24h` INT(11) DEFAULT NULL,"
+        #                         "`SO2_24h` INT(11) DEFAULT NULL,"
+        #                         "`NO2_24h` INT(11) DEFAULT NULL,"
+        #                         "`CO_24h` FLOAT DEFAULT NULL,"
+        #                         "`O3_8h_24h` INT(11) DEFAULT NULL,"
+        #                         "`PrimaryPollutant` VARCHAR(30) DEFAULT NULL,"
+        #                         "`Quality` VARCHAR(11) DEFAULT NULL"
+        #                         ") ENGINE=InnoDB DEFAULT charset=utf8 "
+        #                         "PARTITION BY RANGE (DAY(time)) \
+        #                         (PARTITION p1 VALUES LESS THAN (2) ENGINE = InnoDB,\
+        #                        PARTITION p2 VALUES LESS THAN (3) ENGINE = InnoDB,\
+        #                        PARTITION p3 VALUES LESS THAN (4) ENGINE = InnoDB,\
+        #                        PARTITION p4 VALUES LESS THAN (5) ENGINE = InnoDB,\
+        #                        PARTITION p5 VALUES LESS THAN (6) ENGINE = InnoDB,\
+        #                        PARTITION p6 VALUES LESS THAN (7) ENGINE = InnoDB,\
+        #                        PARTITION p7 VALUES LESS THAN (8) ENGINE = InnoDB,\
+        #                        PARTITION p8 VALUES LESS THAN (9) ENGINE = InnoDB,\
+        #                        PARTITION p9 VALUES LESS THAN (10) ENGINE = InnoDB,\
+        #                        PARTITION p10 VALUES LESS THAN (11) ENGINE = InnoDB,\
+        #                        PARTITION p11 VALUES LESS THAN (12) ENGINE = InnoDB,\
+        #                        PARTITION p12 VALUES LESS THAN (13) ENGINE = InnoDB,\
+        #                        PARTITION p13 VALUES LESS THAN (14) ENGINE = InnoDB,\
+        #                        PARTITION p14 VALUES LESS THAN (15) ENGINE = InnoDB,\
+        #                        PARTITION p15 VALUES LESS THAN (16) ENGINE = InnoDB,\
+        #                        PARTITION p16 VALUES LESS THAN (17) ENGINE = InnoDB,\
+        #                        PARTITION p17 VALUES LESS THAN (18) ENGINE = InnoDB,\
+        #                        PARTITION p18 VALUES LESS THAN (19) ENGINE = InnoDB,\
+        #                        PARTITION p19 VALUES LESS THAN (20) ENGINE = InnoDB,\
+        #                        PARTITION p20 VALUES LESS THAN (21) ENGINE = InnoDB,\
+        #                        PARTITION p21 VALUES LESS THAN (22) ENGINE = InnoDB,\
+        #                        PARTITION p22 VALUES LESS THAN (23) ENGINE = InnoDB,\
+        #                        PARTITION p23 VALUES LESS THAN (24) ENGINE = InnoDB,\
+        #                        PARTITION p24 VALUES LESS THAN (25) ENGINE = InnoDB,\
+        #                        PARTITION p25 VALUES LESS THAN (26) ENGINE = InnoDB,\
+        #                        PARTITION p26 VALUES LESS THAN (27) ENGINE = InnoDB,\
+        #                        PARTITION p27 VALUES LESS THAN (28) ENGINE = InnoDB,\
+        #                        PARTITION p28 VALUES LESS THAN (29) ENGINE = InnoDB,\
+        #                        PARTITION p29 VALUES LESS THAN (30) ENGINE = InnoDB,\
+        #                        PARTITION p30 VALUES LESS THAN (31) ENGINE = InnoDB,\
+        #                        PARTITION p31 VALUES LESS THAN MAXVALUE ENGINE = InnoDB)")
 
     # 写入监测站信息到数据库
     def WTDB_siteinfo(self, data):
