@@ -1,5 +1,7 @@
 # Air_Of_China
 
+[![Build Status](https://travis-ci.org/InLefter/Air_Of_China.svg?branch=master)](https://travis-ci.org/InLefter/Air_Of_China)
+
 a spider (or crawler) based on python3, which is to craw air data from Chinese official website(<http://106.37.208.233:20035>) developed with Silverlight from Micrsoft.And meantime it's a part of my campus SRTP project.
 
 本项目是一个基于python3且从全国城市空气质量发布平台上的Silverlight中爬取的空气质量数据，同时也是我的一个SRTP项目中的一部分。
