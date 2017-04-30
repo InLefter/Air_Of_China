@@ -32,8 +32,8 @@ class SpiderMain(object):
         # self.stationArray = json.loads(data.stationList_json)
         self.cityDict = all_data.cityList_json
         # self.connection = pymysql.Connect(host='127.0.0.1',
-                                          user='root', passwd='',
-                                          charset="utf8")
+        #                                  user='root', passwd='',
+        #                                  charset="utf8")
         # self.con_cursor = self.connection.cursor()
         self.dt = datetime.datetime
         self.now = self.dt.now().strftime('%Y%m')
@@ -361,7 +361,7 @@ class SpiderMain(object):
 
     # 获得城市实时信息
     def getCityRealTimeInfo(self):
-        self.createCityRealTimeTable()
+        # self.createCityRealTimeTable()
         action = 'GetCityRealTimeAQIModelByCitycode'
         for key in self.cityDict.keys():
             request = requests.get(
@@ -395,7 +395,7 @@ class SpiderMain(object):
 
     # 获得所有站点的信息-通过省份查询所有站点
     def getAllSitesInfoByProvince(self):
-        self.createSiteTable()
+        # self.createSiteTable()
         for key in range(30):
             json_data = self.craw('GetProvincePublishLives','<pid>'+str(key+1)+'</pid>')
 
@@ -405,7 +405,7 @@ class SpiderMain(object):
 
     # 获得所有站点的信息-通过城市查询所有站点
     def getAllSitesInfoByCity(self):
-        self.createSiteTable()
+        # self.createSiteTable()
         for key in self.cityDict.keys():
             json_data = self.craw('GetAreaAQIPublishLive', '<area>' + self.cityDict[key] + '</area>')
 
@@ -443,7 +443,7 @@ class SpiderMain(object):
 
     # 获得城市日信息
     def getAllCityInfo(self):
-        self.createCityDayTable()
+        # self.createCityDayTable()
         for key in self.cityDict.keys():
             json_data = self.craw('GetCityDayAqiHistoryByCondition', '<cityCode>' + key + '</cityCode>')
 

@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="aad72f01-581d-4f55-a5f8-f65045dc56e9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Spider.py" afterPath="$PROJECT_DIR$/Spider.py" />
     </list>
     <ignored path="Air_Of_China.iws" />
@@ -34,20 +32,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Spider.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Spider.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Spider.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="623">
-              <caret line="514" column="40" lean-forward="true" selection-start-line="514" selection-start-column="40" selection-end-line="515" selection-end-column="57" />
-              <folding>
-                <element signature="e#2657#6253#0" expanded="false" />
-                <element signature="e#6320#9868#0" expanded="false" />
-                <element signature="e#9929#13474#0" expanded="false" />
-                <element signature="e#13537#14037#0" expanded="false" />
-                <element signature="e#14099#14625#0" expanded="false" />
-                <element signature="e#14697#15213#0" expanded="false" />
-                <element signature="e#15317#16134#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="2758">
+              <caret line="366" column="25" lean-forward="true" selection-start-line="366" selection-start-column="25" selection-end-line="366" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".travis.yml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.travis.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="308">
+              <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -65,8 +65,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2064" />
-    <option name="y" value="54" />
+    <option name="x" value="2336" />
+    <option name="y" value="43" />
     <option name="width" value="1416" />
     <option name="height" value="954" />
   </component>
@@ -85,8 +85,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -297,7 +297,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2064" y="54" width="1416" height="954" extended-state="0" />
+    <frame x="2336" y="43" width="1416" height="954" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21327683" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -310,7 +310,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -346,17 +346,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Spider.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10516">
-          <caret line="487" column="22" lean-forward="true" selection-start-line="487" selection-start-column="22" selection-end-line="487" selection-end-column="22" />
-          <folding>
-            <element signature="e#2657#6253#0" expanded="false" />
-            <element signature="e#6320#9868#0" expanded="false" />
-            <element signature="e#9929#13474#0" expanded="false" />
-            <element signature="e#13537#14037#0" expanded="false" />
-            <element signature="e#14099#14625#0" expanded="false" />
-            <element signature="e#14697#15213#0" expanded="false" />
-            <element signature="e#15317#16134#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="11308">
+          <caret line="514" column="40" lean-forward="true" selection-start-line="514" selection-start-column="40" selection-end-line="515" selection-end-column="57" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -370,17 +362,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Spider.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="623">
-          <caret line="514" column="40" lean-forward="true" selection-start-line="514" selection-start-column="40" selection-end-line="515" selection-end-column="57" />
-          <folding>
-            <element signature="e#2657#6253#0" expanded="false" />
-            <element signature="e#6320#9868#0" expanded="false" />
-            <element signature="e#9929#13474#0" expanded="false" />
-            <element signature="e#13537#14037#0" expanded="false" />
-            <element signature="e#14099#14625#0" expanded="false" />
-            <element signature="e#14697#15213#0" expanded="false" />
-            <element signature="e#15317#16134#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="10516">
+          <caret line="487" column="22" lean-forward="true" selection-start-line="487" selection-start-column="22" selection-end-line="487" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CityRealTimeSpider.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Spider.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2758">
+          <caret line="366" column="25" lean-forward="true" selection-start-line="366" selection-start-column="25" selection-end-line="366" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
