@@ -6,7 +6,9 @@ from io import StringIO, BytesIO
 
 import data as all_data
 import json, re, base64, zlib, datetime
-import requests, pymysql, xmltodict, redis
+import requests, xmltodict
+
+# import redis,pymysql
 
 # 所需要的请求以及相关格式
 # GET action:GetCitiesByPid?pid=11 获得省份城市
@@ -29,15 +31,15 @@ class SpiderMain(object):
         # self.cityArray = json.loads(data.cityList_json)
         # self.stationArray = json.loads(data.stationList_json)
         self.cityDict = all_data.cityList_json
-        self.connection = pymysql.Connect(host='127.0.0.1',
-                                          user='root', passwd=‘xxxxx’,
+        # self.connection = pymysql.Connect(host='127.0.0.1',
+                                          user='root', passwd='',
                                           charset="utf8")
-        self.con_cursor = self.connection.cursor()
+        # self.con_cursor = self.connection.cursor()
         self.dt = datetime.datetime
         self.now = self.dt.now().strftime('%Y%m')
-        self.con_cursor.execute("USE AQI")
+        # self.con_cursor.execute("USE AQI")
 
-        self.redis_conn = redis.Redis(host='localhost', port=6379,
+        # self.redis_conn = redis.Redis(host='localhost', port=6379,
                                       db=0, decode_responses=False,
                                       encoding='utf-8')
 
@@ -278,18 +280,26 @@ class SpiderMain(object):
             except:
                 data[index] = 0
 
-        self.WTDB_cityrealtimeinfo(data)
+        # self.WTDB_cityrealtimeinfo(data)
 
-        try:
-            data['Measure'] = air_me[data['Quality']]['measure']
-            data['Unhealthful'] = air_me[data['Quality']]['unhealthful']
-        except:
-            data['Measure'] = '—'
-            data['Unhealthful'] = '—'
+        # try:
+        #     data['Measure'] = air_me[data['Quality']]['measure']
+        #     data['Unhealthful'] = air_me[data['Quality']]['unhealthful']
+        # except:
+        #     data['Measure'] = '—'
+        #     data['Unhealthful'] = '—'
+        #
+        # json_formated = json.dumps(data, ensure_ascii=False)
 
-        json_formated = json.dumps(data, ensure_ascii=False)
-        data_to_redis = '{ "CityCode": ' + str(data['CityCode']) + ', "Detail": ' + json_formated + '}'
-        self.redis_conn.set(data['CityCode'], data_to_redis)
+        # # Redis-写入到最新24小时城市信息
+        # redis_name = str(data['CityCode']) + '_24h'
+        # # print(json_formated)
+        # self.redis_conn.lpush(redis_name, json_formated)
+        # if self.redis_conn.llen(redis_name) >= 24:
+        #     self.redis_conn.rpop(redis_name)
+        #
+        # data_to_redis = '{ "CityCode": ' + str(data['CityCode']) + ', "Detail": ' + json_formated + '}'
+        # self.redis_conn.set(data['CityCode'], data_to_redis)
 
     # 处理得到的site-JSON数据
     def dealWithSiteData(self, dict):
@@ -323,30 +333,31 @@ class SpiderMain(object):
             except:
                 data[index] = 0
 
-        self.WTDB_siteinfo(data)
-        try:
-            data['Measure'] = air_me[data['Quality']]['measure']
-            data['Unhealthful'] = air_me[data['Quality']]['unhealthful']
-        except:
-            data['Measure'] = '—'
-            data['Unhealthful'] = '—'
+        # self.WTDB_siteinfo(data)
 
-        data['Time'] = data['Time'].strftime('%Y-%m-%d %H:%M:%S')
+        # try:
+        #     data['Measure'] = air_me[data['Quality']]['measure']
+        #     data['Unhealthful'] = air_me[data['Quality']]['unhealthful']
+        # except:
+        #     data['Measure'] = '—'
+        #     data['Unhealthful'] = '—'
+        #
+        # data['Time'] = data['Time'].strftime('%Y-%m-%d %H:%M:%S')
+        #
+        # json_formated = json.dumps(data, ensure_ascii=False)
+        #
+        # # Redis-写入到最新24小时站点信息
+        # redis_name = data['StationCode'] + '_24h'
+        # # print(json_formated)
+        # self.redis_conn.lpush(redis_name, json_formated)
+        # if self.redis_conn.llen(redis_name) >= 24:
+        #     self.redis_conn.rpop(redis_name)
+        #
+        # # Redis-写入到最新站点信息
+        # data_to_redis = '{ "StationCode": "' +data['StationCode'] + '", "Detail": ' + json_formated + '}'
+        # self.redis_conn.set(data['StationCode'], data_to_redis)
 
-        json_formated = json.dumps(data, ensure_ascii=False)
-
-        # Redis-写入到最新24小时站点信息
-        redis_name = data['StationCode'] + '_24h'
-        # print(json_formated)
-        self.redis_conn.lpush(redis_name, json_formated)
-        if self.redis_conn.llen(redis_name) >= 24:
-            self.redis_conn.rpop(redis_name)
-
-        # Redis-写入到最新站点信息
-        data_to_redis = '{ "StationCode": "' +data['StationCode'] + '", "Detail": ' + json_formated + '}'
-        self.redis_conn.set(data['StationCode'], data_to_redis)
-
-        return json.loads(json_formated)
+        # return json.loads(json_formated)
 
     # 获得城市实时信息
     def getCityRealTimeInfo(self):
@@ -379,7 +390,7 @@ class SpiderMain(object):
             result = json_d['GetCityRealTimeAQIModelByCitycodeResponse']['GetCityRealTimeAQIModelByCitycodeResult']['RootResults']['CityAQIPublishLive']
 
             # print(result)
-            self.dealWithCityRealTimeData(result)
+            # self.dealWithCityRealTimeData(result)
 
 
     # 获得所有站点的信息-通过省份查询所有站点
@@ -411,8 +422,8 @@ class SpiderMain(object):
                 site_jsoned = self.dealWithSiteData(get_data)
 
                 # Redis-写入到最新城市所有站点信息
-                data_to_redis = '{ "CityCode_AllSites": ' + key + ', "Detail": ' + str(site_jsoned) + '}'
-                self.redis_conn.set(key + '_allsite', data_to_redis)
+                # data_to_redis = '{ "CityCode_AllSites": ' + key + ', "Detail": ' + str(site_jsoned) + '}'
+                # self.redis_conn.set(key + '_allsite', data_to_redis)
             else:
                 data_formated_dict = []
                 for site in get_data:
@@ -426,8 +437,8 @@ class SpiderMain(object):
                 # print(json.dumps(data_formated_dict, ensure_ascii=False))
 
                 # Redis-写入到最新城市所有站点信息
-                data_to_redis = '{ "CityCode_AllSites": ' + key + ', "Detail": ' + json.dumps(data_formated_dict, ensure_ascii=False) + '}'
-                self.redis_conn.set(key + '_allsite', data_to_redis)
+                # data_to_redis = '{ "CityCode_AllSites": ' + key + ', "Detail": ' + json.dumps(data_formated_dict, ensure_ascii=False) + '}'
+                # self.redis_conn.set(key + '_allsite', data_to_redis)
 
 
     # 获得城市日信息
@@ -476,30 +487,30 @@ class SpiderMain(object):
                 except:
                     data[index[0:-4]] = 0
 
-            self.WTDB_cityinfo(data)
+            # self.WTDB_cityinfo(data)
 
-            try:
-                data['Measure'] = air_me[data['Quality']]['measure']
-                data['Unhealthful'] = air_me[data['Quality']]['unhealthful']
-            except:
-                data['Measure'] = '—'
-                data['Unhealthful'] = '—'
-
-            data['Time'] = data['Time'].strftime('%Y-%m-%d %H:%M:%S')
-            json_formated = json.dumps(data, ensure_ascii=False)
-
-            # Redis-写入到最新一个月城市信息
-            redis_name = data['CityCode'] + '_month'
-            # print(json_formated)
-            self.redis_conn.lpush(redis_name, json_formated)
-            if self.redis_conn.llen(redis_name) >= 30:
-                self.redis_conn.rpop(redis_name)
+            # try:
+            #     data['Measure'] = air_me[data['Quality']]['measure']
+            #     data['Unhealthful'] = air_me[data['Quality']]['unhealthful']
+            # except:
+            #     data['Measure'] = '—'
+            #     data['Unhealthful'] = '—'
+            #
+            # data['Time'] = data['Time'].strftime('%Y-%m-%d %H:%M:%S')
+            # json_formated = json.dumps(data, ensure_ascii=False)
+            #
+            # # Redis-写入到最新一个月城市信息
+            # redis_name = data['CityCode'] + '_month'
+            # # print(json_formated)
+            # self.redis_conn.lpush(redis_name, json_formated)
+            # if self.redis_conn.llen(redis_name) >= 30:
+            #     self.redis_conn.rpop(redis_name)
 
 
     # update json-formated redis data after crawing
-    def updateGeneralRedis(self,data):
-        self.redis_conn.set(data['ID'], data['detail'])
+    # def updateGeneralRedis(self,data):
+    #     self.redis_conn.set(data['ID'], data['detail'])
 
     # 更新城市所有站点的redis数据
-    def updateCityAllSites(self,data):
-        self.redis_conn.set(data['ID'], data['detail'])
+    # def updateCityAllSites(self,data):
+    #     self.redis_conn.set(data['ID'], data['detail'])
