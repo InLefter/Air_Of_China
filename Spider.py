@@ -40,8 +40,8 @@ class SpiderMain(object):
         # self.con_cursor.execute("USE AQI")
 
         # self.redis_conn = redis.Redis(host='localhost', port=6379,
-                                      db=0, decode_responses=False,
-                                      encoding='utf-8')
+        #                              db=0, decode_responses=False,
+        #                              encoding='utf-8')
 
         self.url = 'http://106.37.208.233:20035/ClientBin/Env-CnemcPublish-RiaServices-EnvCnemcPublishDomainService.svc/binary/'
         self.headers = {'user-agent': "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; rv:11.0) like Gecko",
