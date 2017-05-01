@@ -444,51 +444,68 @@ class SpiderMain(object):
     # 获得城市日信息
     def getAllCityInfo(self):
         # self.createCityDayTable()
+        action = 'GetCityDayAQIModelByCitycode'
         for key in self.cityDict.keys():
-            json_data = self.craw('GetCityDayAqiHistoryByCondition', '<cityCode>' + key + '</cityCode>')
+            request = requests.get(
+                url=self.url + action,
+                params={'cityCode': key},
+                headers=self.headers)
+            records = Record.parse(BytesIO(request.content))
+            res = StringIO()
+            print_records(records, fp=res)
+            res.seek(0)
 
-            try:
-                history_data = json_data['ArrayOfCityDayAQIPublishHistory']['CityDayAQIPublishHistory']
-            except:
-                continue
+            temp = res.readlines()
+            str = ''
+            for row in temp:
+                row = row.replace('[\'', '')
+                row = row.replace('\']', '')
+                row = row.replace('\\n\'', '')
+                row = row.replace('a:', '')
+                row = row.replace('b:', '')
+                row = row.replace('&mdash;', '—')
+                str = str + row
 
-            latest_data = history_data[len(history_data) - 1]
+            dict = xmltodict.parse(str)
+            json_d = json.loads(json.dumps(dict))
+		
+	    	# result为获得的数据字典
+            result = json_d['GetCityDayAQIModelByCitycodeResponse']['GetCityDayAQIModelByCitycodeResult']['RootResults']['CityDayAQIPublishLive']
 
-            time = self.dt.strptime(latest_data['TimePoint'], '%Y-%m-%dT%H:%M:%S')
-            data = {}
-            data['CityCode'] = latest_data['CityCode']
-            data['Area'] = latest_data['Area']
-            data['Time'] = time
-            data['PrimaryPollutant'] = latest_data['PrimaryPollutant']
-            data['Quality'] = latest_data['Quality']
-
-            # 排除没有具体数据的情况
-            try:
-                data['CO'] = float(latest_data['CO_24h'])
-            except:
-                data['CO'] = 0.0
-
-            # AQI --> int
-            try:
-                data['AQI'] = int(latest_data['AQI'])
-            except:
-                data['AQI'] = 0
-
-            # O3_8h_24h --> O3
-            try:
-                data['O3'] = int(latest_data['O3_8h_24h'])
-            except:
-                data['O3'] = 0
-
-            list = ['NO2_24h', 'PM10_24h', 'PM2_5_24h', 'SO2_24h']
-            for index in list:
-                try:
-                    data[index[0:-4]] = int(latest_data[index])
-                except:
-                    data[index[0:-4]] = 0
-
+            # data = {}
+            # data['CityCode'] = result['CityCode']
+            # data['Area'] = result['Area']
+            # data['Time'] = result['TimePoint'].replace('T', ' ')
+            # data['PrimaryPollutant'] = result['PrimaryPollutant']
+            # data['Quality'] = result['Quality']
+            #
+            # # 排除没有具体数据的情况
+            # try:
+            #     data['CO'] = float(result['CO_24h'])
+            # except:
+            #     data['CO'] = 0.0
+            #
+            # # AQI --> int
+            # try:
+            #     data['AQI'] = int(result['AQI'])
+            # except:
+            #     data['AQI'] = 0
+            #
+            # # O3_8h_24h --> O3
+            # try:
+            #     data['O3'] = int(result['O3_8h_24h'])
+            # except:
+            #     data['O3'] = 0
+            #
+            # list = ['NO2_24h', 'PM10_24h', 'PM2_5_24h', 'SO2_24h']
+            # for index in list:
+            #     try:
+            #         data[index[0:-4]] = int(result[index])
+            #     except:
+            #         data[index[0:-4]] = 0
+            #
             # self.WTDB_cityinfo(data)
-
+            #
             # try:
             #     data['Measure'] = air_me[data['Quality']]['measure']
             #     data['Unhealthful'] = air_me[data['Quality']]['unhealthful']
@@ -496,7 +513,6 @@ class SpiderMain(object):
             #     data['Measure'] = '—'
             #     data['Unhealthful'] = '—'
             #
-            # data['Time'] = data['Time'].strftime('%Y-%m-%d %H:%M:%S')
             # json_formated = json.dumps(data, ensure_ascii=False)
             #
             # # Redis-写入到最新一个月城市信息
